@@ -1,10 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import supabase from '../config/supabaseClient';
 
 const CommunityCardTwo = ({ communityData }) => {
     const { name, image, authorImage, totalRaised, totalProjects, communityMembers } = communityData;
 
+    // console.log(supabase);
     return (
         <Link href={'/community-details'} className='live-card discover-card white-card'>
             <Image src={image} alt='' className='card-image w-100 img-fluid' width={310} height={173} />

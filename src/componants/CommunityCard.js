@@ -1,13 +1,20 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import supabase from '../config/supabaseClient';
+import { useEffect , useState } from 'react';
 
 const CommunityCard = ({ communityData }) => {
     const { username, avatarSrc, description, likes, totalRaise, contributeChain, distributeChain, tags } = communityData;
+    
+    // console.log(supabase);
+
 
     return (
         <Link href={'/community-details'} className='comm-card white-card'>
             <div className='card-content'>
+                
+                
                 <div className='d-flex justify-content-between align-items-center'>
                     <div className='d-flex align-items-center icon-title'>
                         <Image src={avatarSrc} className='me-2' width={56} height={56} alt='author' />
