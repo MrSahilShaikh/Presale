@@ -22,7 +22,7 @@ const CommunityCardTwo = ({ communityData }) => {
                     </div>
                 </div>
 
-                <p className='content-font mb-3 mt-3 text-start'>Libera is the DEX for RWA and on-chain FX, working...</p>
+                <p className='content-font mb-3 mt-3 text-start'>Sahil</p>
 
                 <div className='points-list mb-3'>
                     <div className='list'>
