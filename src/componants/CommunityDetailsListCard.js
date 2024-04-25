@@ -41,9 +41,8 @@
 //     fetchCommunity();
 //   }, []);
 
-  
 //     const [logoUrl, setLogoUrl] = useState(null);
-  
+
 //     useEffect(() => {
 //       const fetchLogo = async () => {
 //         try {
@@ -51,7 +50,7 @@
 //           const { publicURL, error } = await supabase.storage
 //             .from('logo')
 //             .getPublicUrl("https://mfeicxyamamccipyoodu.supabase.co/storage/v1/object/public/logo/sugarlogo.png?t=2024-04-24T07%3A23%3A18.782Z");
-  
+
 //           if (error) {
 //             console.error("Error fetching logo:", error.message);
 //           } else {
@@ -62,10 +61,9 @@
 //           console.error("Error fetching logo:", error.message);
 //         }
 //       };
-  
+
 //       fetchLogo();
 //     }, []);
-  
 
 //   return (
 //     <div>
@@ -166,23 +164,33 @@
 
 // export default CommunityDetailsListCard;
 
-
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import supabase from "../config/supabaseClient";
 
 const CommunityDetailsListCard = ({ communityData }) => {
-  const { username, avatarSrc, description, likes, totalRaise, contributeChain, distributeChain, tags } = communityData;
+  const {
+    username,
+    avatarSrc,
+    description,
+    likes,
+    totalRaise,
+    contributeChain,
+    distributeChain,
+    tags,
+  } = communityData;
 
   const [fetchError, setFetchError] = useState(null);
   const [communities, setCommunities] = useState([]);
-  const [logoUrl, setLogoUrl] = useState(null);
+  const [logoUrl, setLogoUrl] = useState([]);
 
   useEffect(() => {
     const fetchCommunity = async () => {
       try {
-        const { data: allCommunities, error } = await supabase.from("community").select();
+        const { data: allCommunities, error } = await supabase
+          .from("community")
+          .select();
 
         if (error) {
           setFetchError("Could not fetch community data");
@@ -199,24 +207,31 @@ const CommunityDetailsListCard = ({ communityData }) => {
 
     fetchCommunity();
   }, []);
-
+  
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const { publicURL, error } = await supabase.storage.from('logo').getPublicUrl("logo/sugarlogo.png");
-
+        // const path ="https://mfeicxyamamccipyoodu.supabase.co/storage/v1/object/public/logo/SKOPad.jpg";
+        const { publicURL, error } = await supabase.storage
+          .from('logo')
+          .getPublicUrl('SKOPad.jpg');
+  
         if (error) {
-          console.error("Error fetching logo:", error.message);
-        } else {
-          setLogoUrl(publicURL);
+          throw new Error(error.message);
         }
+  
+        console.log("Logo URL:", publicURL);
+        setLogoUrl(publicURL);
       } catch (error) {
         console.error("Error fetching logo:", error.message);
       }
     };
-
+  
     fetchLogo();
+    
   }, []);
+  
+  
 
   return (
     <div>
@@ -226,13 +241,31 @@ const CommunityDetailsListCard = ({ communityData }) => {
           href={`/community-details/`}
           className="comm-card comm-card-two white-card"
         >
+          {logoUrl && (
+        <Image
+        // Use logoUrl here
+       src={logoUrl}
+       alt= ""
+       className="card-image w-100 img-fluid"
+       width={310}
+       height={173}
+     />
+      )}
+
+          
           <Image
-            src={logoUrl} // Use logoUrl here
-            alt=""
+             // Use logoUrl here
+            src={logoUrl}
+            alt= ""
             className="card-image w-100 img-fluid"
             width={310}
             height={173}
           />
+          
+            
+          
+            
+          
           <div className="tags-list">
             <span className={`tag yellow`}>KYC</span>
             <span className={`tag green`}>

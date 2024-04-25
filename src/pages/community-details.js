@@ -154,6 +154,9 @@ export default function ProjectDetails() {
     url: router.asPath,
   };
 
+  const [fetchError, setFetchError] = useState(null);
+  const [communities, setCommunities] = useState([]);
+  const [logoUrl, setLogoUrl] = useState(null);
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
@@ -170,6 +173,49 @@ export default function ProjectDetails() {
     };
 
     fetchDeals();
+  }, []);
+
+  useEffect(() => {
+    const fetchCommunity = async () => {
+      try {
+        const { data: allCommunities, error } = await supabase
+          .from("community")
+          .select();
+
+        if (error) {
+          setFetchError("Could not fetch community data");
+          console.error(error);
+        } else {
+          setCommunities(allCommunities);
+          setFetchError(null);
+        }
+      } catch (error) {
+        setFetchError("An error occurred while fetching community data");
+        console.error(error);
+      }
+    };
+
+    fetchCommunity();
+  }, []);
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const { publicURL, error } = await supabase.storage
+          .from("logo")
+          .getPublicUrl("logo/sugarlogo.png");
+
+        if (error) {
+          console.error("Error fetching logo:", error.message);
+        } else {
+          setLogoUrl(publicURL);
+        }
+      } catch (error) {
+        console.error("Error fetching logo:", error.message);
+      }
+    };
+
+    fetchLogo();
   }, []);
 
   return (
@@ -196,13 +242,13 @@ export default function ProjectDetails() {
                       <div className="d-flex flex-column title-wrapper">
                         <div className="d-flex align-items-center">
                           <h1 className="mb-0">
-                            {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <h3>{deal.username}</h3>
-
+                            {communities.length > 0 && (
+                              <div key={communities[0].id}>
+                                <h3>{communities[0].community_name}</h3>
                               </div>
-                            ))}
+                            )}
                           </h1>
+
                           <div class="tags-list position-static tags-small d-inline-flex">
                             <span class="tag yellow">KYC</span>
                             <span class="tag green">
@@ -212,12 +258,11 @@ export default function ProjectDetails() {
                           </div>
                         </div>
                         <p className="mb-0">
-                        {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <p>{deal.user_description}</p>
-
-                              </div>
-                            ))}
+                          {communities.length > 0 && (
+                            <div key={communities[0].id}>
+                              <p>{communities[0].description}</p>
+                            </div>
+                          )}
                         </p>
                       </div>
                     </div>
@@ -264,12 +309,14 @@ export default function ProjectDetails() {
                             alt="author"
                           />
                           <div>
-                            <h3 className="fw-bold fs-5 mb-1">@{deals.map((deal) => (
-                              <div key={deal.id}>
-                                <h3>{deal.deal_name}</h3>
-
-                              </div>
-                            ))}</h3>
+                            <h3 className="fw-bold fs-5 mb-1">
+                              @
+                              {deals.map((deal) => (
+                                <div key={deal.id}>
+                                  <h3>{deal.deal_name}</h3>
+                                </div>
+                              ))}
+                            </h3>
                             <p className="content-font color-content mb-0">
                               {}
                             </p>
@@ -277,12 +324,11 @@ export default function ProjectDetails() {
                         </div>
                       </div>
                       <p className="content-font mb-3 mt-3 text-start">
-                      {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <p>{deal.deal_description}</p>
-
-                              </div>
-                            ))}
+                        {deals.map((deal) => (
+                          <div key={deal.id}>
+                            <p>{deal.deal_description}</p>
+                          </div>
+                        ))}
                       </p>
                       <div className="prog-bar mt-3 mb-1 text-start">
                         <span className="content-font">
@@ -309,31 +355,32 @@ export default function ProjectDetails() {
                       <div className="points-list">
                         <div className="list">
                           <p>Fundraising Goal:</p>
-                          
-                          {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <p>{deal.fundraising_goal}M</p>
 
-                              </div>
-                            ))}
+                          {deals.map((deal) => (
+                            <div key={deal.id}>
+                              <p>{deal.fundraising_goal}M</p>
+                            </div>
+                          ))}
                         </div>
                         <div className="list">
                           <p>Туре:</p>
-                          <p>{deals.map((deal) => (
+                          <p>
+                            {deals.map((deal) => (
                               <div key={deal.id}>
                                 <p>{deal.type}</p>
-
                               </div>
-                            ))}</p>
+                            ))}
+                          </p>
                         </div>
                         <div className="list">
                           <p>Token Price:</p>
-                          <p>{deals.map((deal) => (
+                          <p>
+                            {deals.map((deal) => (
                               <div key={deal.id}>
                                 <p>{deal.token_price}</p>
-
                               </div>
-                            ))}</p>
+                            ))}
+                          </p>
                         </div>
                         <div className="list">
                           <p>Join Network:</p>
@@ -348,7 +395,6 @@ export default function ProjectDetails() {
                             {deals.map((deal) => (
                               <div key={deal.id}>
                                 <p>{deal.join_network}</p>
-
                               </div>
                             ))}
                           </p>
@@ -366,7 +412,6 @@ export default function ProjectDetails() {
                             {deals.map((deal) => (
                               <div key={deal.id}>
                                 <p>{deal.distribution_network}</p>
-
                               </div>
                             ))}
                           </p>
@@ -386,15 +431,12 @@ export default function ProjectDetails() {
                       <div className="counter-boxnew">
                         <span>Total Raised</span>
                         <h3 className="mb-0">
-                          {/* $<CountUp end={1} />M */}
-                          {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <h3>{deal.total_raised}M</h3>
-                                {/* <h3>$<CountUp end={deal.totalraised}/>M</h3> */}
-
-                              </div>
-                            ))}
                           
+                          {communities.length > 0 && (
+                            <div key={communities[0].id}>
+                              <p>{communities[0].total_raise}M</p>
+                            </div>
+                          )}
                         </h3>
                       </div>
                       <div className="counter-boxnew">
@@ -402,11 +444,10 @@ export default function ProjectDetails() {
                         <h3 className="mb-0">
                           {/* $<CountUp end={500} />k */}
                           {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <p>{deal.total_distributed}k</p>
-
-                              </div>
-                            ))}
+                            <div key={deal.id}>
+                              <p>{deal.total_distributed}k</p>
+                            </div>
+                          ))}
                         </h3>
                       </div>
                       <div className="counter-boxnew">
@@ -414,26 +455,25 @@ export default function ProjectDetails() {
                         <h3 className="mb-0">
                           {/* <CountUp end={10} /> */}
                           {deals.map((deal) => (
-                              <div key={deal.id}>
-                                <h3>{deal.total_follower}k+</h3>
-
-                              </div>
-                            ))}
-                          
+                            <div key={deal.id}>
+                              <h3>{deal.total_follower}k+</h3>
+                            </div>
+                          ))}
                         </h3>
                       </div>
                       <div className="counter-boxnew">
                         <span>Feedback Score</span>
-                        <h3 className="mb-0">{deals.map((deal) => (
-                              <div key={deal.id}>
-                                <h3>{deal.feedback_score} |200</h3>
-
-                              </div>
-                            ))}</h3>
+                        <h3 className="mb-0">
+                          {deals.map((deal) => (
+                            <div key={deal.id}>
+                              <h3>{deal.feedback_score} |200</h3>
+                            </div>
+                          ))}
+                        </h3>
                       </div>
                     </div>
                     <Image
-                      src={"/img/card.png"}
+                      src={""} //deal image on right
                       alt="image"
                       className="img-fluid counter-image w-100 mt-4 mt-lg-4"
                       width={782}

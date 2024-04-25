@@ -409,11 +409,11 @@ export default function Communities() {
                                         </Col>
                                         <Col className={`mt-2 mt-lg-0 ${isFilterOpen ? 'col-lg-12' : 'col-lg-9'}`}>
                                             <Row className="g-3 g-md-4 ">
-                                                {/* {communitiesData.map((community, index) => (
+                                                {communitiesData.map((community, index) => (
                                                     <Col className={`${isFilterOpen ? 'col-md-6 col-xl-4' : 'col-lg-6'}`} key={'Test' + index}>
                                                         <CommunityDetailsListCard communityData={community} />
                                                     </Col>
-                                                ))} */}
+                                                ))}
                                             </Row>
                                         </Col>
                                     </Row>
