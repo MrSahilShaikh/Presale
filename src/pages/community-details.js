@@ -156,7 +156,7 @@ export default function ProjectDetails() {
 
   const [fetchError, setFetchError] = useState(null);
   const [communities, setCommunities] = useState([]);
-  const [logoUrl, setLogoUrl] = useState(null);
+
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
@@ -198,25 +198,7 @@ export default function ProjectDetails() {
     fetchCommunity();
   }, []);
 
-  useEffect(() => {
-    const fetchLogo = async () => {
-      try {
-        const { publicURL, error } = await supabase.storage
-          .from("logo")
-          .getPublicUrl("logo/sugarlogo.png");
-
-        if (error) {
-          console.error("Error fetching logo:", error.message);
-        } else {
-          setLogoUrl(publicURL);
-        }
-      } catch (error) {
-        console.error("Error fetching logo:", error.message);
-      }
-    };
-
-    fetchLogo();
-  }, []);
+  
 
   return (
     <>
@@ -233,12 +215,15 @@ export default function ProjectDetails() {
                   <div className="d-flex justify-content-between flex-column flex-md-row mb-0 mb-md-4">
                     <div className="flex-wrapper">
                       <Image
-                        src={"/img/det-pro.png"}
-                        alt="image"
+                        
+                        src={communities.length > 0 && communities[0].community_logo}
+                        alt="Community Logo"
                         className="me-3"
                         width={56}
                         height={56}
                       />
+                      
+                    
                       <div className="d-flex flex-column title-wrapper">
                         <div className="d-flex align-items-center">
                           <h1 className="mb-0">
@@ -302,7 +287,7 @@ export default function ProjectDetails() {
                       <div className="d-flex justify-content-between align-items-center ">
                         <div className="d-flex align-items-center icon-title text-black">
                           <Image
-                            src={"/img/det-pro.png"}
+                            src={communities.length > 0 && communities[0].community_logo}
                             className="me-2 rounded"
                             width={50}
                             height={50}
@@ -473,7 +458,7 @@ export default function ProjectDetails() {
                       </div>
                     </div>
                     <Image
-                      src={""} //deal image on right
+                      src={communities.length > 0 && communities[0].banner} //deal image on right
                       alt="image"
                       className="img-fluid counter-image w-100 mt-4 mt-lg-4"
                       width={782}
