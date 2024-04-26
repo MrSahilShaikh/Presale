@@ -84,11 +84,11 @@ const CommunityCard = ({ communityData }) => {
             </div>
 
             <div className="tags-list larger p-0 noposition">
-              {communityItem.tags.map((tag, index) => (
+              {/* {communityItem.tags.map((tag, index) => (
                 <span key={index} className={tag.color}>
                   {tag.label}
                 </span>
-              ))}
+              ))} */}
             </div>
           </div>
         </Link>

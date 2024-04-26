@@ -198,8 +198,6 @@ export default function ProjectDetails() {
     fetchCommunity();
   }, []);
 
-  
-
   return (
     <>
       <Seo {...metaData} />
@@ -214,16 +212,26 @@ export default function ProjectDetails() {
                 <Col lg={12} className="order-1">
                   <div className="d-flex justify-content-between flex-column flex-md-row mb-0 mb-md-4">
                     <div className="flex-wrapper">
-                      <Image
-                        
-                        src={communities.length > 0 && communities[0].community_logo}
-                        alt="Community Logo"
-                        className="me-3"
-                        width={56}
-                        height={56}
-                      />
-                      
-                    
+                      {/* {communities.length > 0 && communities[0].community_logo && ( */}
+                      {/* {communities.map((community) => ( */}
+                     
+                        <Image
+                          // key={community.id}
+                          src={
+                            communities.length > 0 &&
+                            communities[0].community_logo
+                          }
+                              
+                            
+                          
+                          alt="Community Logo"
+                          className="me-3"
+                          width={56}
+                          height={56}
+                        />
+                      {/* ))} */}
+                     
+
                       <div className="d-flex flex-column title-wrapper">
                         <div className="d-flex align-items-center">
                           <h1 className="mb-0">
@@ -233,6 +241,7 @@ export default function ProjectDetails() {
                               </div>
                             )}
                           </h1>
+                          
 
                           <div class="tags-list position-static tags-small d-inline-flex">
                             <span class="tag yellow">KYC</span>
@@ -248,6 +257,7 @@ export default function ProjectDetails() {
                               <p>{communities[0].description}</p>
                             </div>
                           )}
+                          
                         </p>
                       </div>
                     </div>
@@ -287,7 +297,10 @@ export default function ProjectDetails() {
                       <div className="d-flex justify-content-between align-items-center ">
                         <div className="d-flex align-items-center icon-title text-black">
                           <Image
-                            src={communities.length > 0 && communities[0].community_logo}
+                            src={
+                              communities.length > 0 &&
+                              communities[0].community_logo
+                            }
                             className="me-2 rounded"
                             width={50}
                             height={50}
@@ -303,7 +316,7 @@ export default function ProjectDetails() {
                               ))}
                             </h3>
                             <p className="content-font color-content mb-0">
-                              {}
+                              { }
                             </p>
                           </div>
                         </div>
@@ -416,7 +429,6 @@ export default function ProjectDetails() {
                       <div className="counter-boxnew">
                         <span>Total Raised</span>
                         <h3 className="mb-0">
-                          
                           {communities.length > 0 && (
                             <div key={communities[0].id}>
                               <p>{communities[0].total_raise}M</p>
