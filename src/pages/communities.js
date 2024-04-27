@@ -127,6 +127,8 @@ export default function Communities() {
     // },
   ]);
 
+  const router = useRouter();
+
   const handleCheckboxChange = (id) => {
     const updatedCheckboxes = [...selectedCheckboxes];
     const index = updatedCheckboxes.indexOf(id);
@@ -146,7 +148,6 @@ export default function Communities() {
     console.log(isFilterOpen);
   };
 
-  const router = useRouter();
 
   const metaData = {
     title: "Communities - Launchpad",
@@ -603,12 +604,14 @@ export default function Communities() {
                         <div className="row">
                           {communitiesData.map((community, index) => {
                             return (
-                              <div className="col-4">
-                                <Link
+                              <div className="col-4" key={index+1}>
+                                {/* <Link
                                   key={community.id}
                                   href={`/community-details/`}
                                   className="comm-card comm-card-two white-card"
-                                >
+                                > */}
+                                <div className="comm-card comm-card-two white-card">
+
                                   <Image
                                     src={community?.banner}
                                     alt=""
@@ -683,11 +686,23 @@ export default function Communities() {
                                       </span>
                                     </div>
 
-                                    <button className="w-100 button-primary mt-3"onClick={$event =>console.log(community,'ss')}>
+                                    <button className="w-100 button-primary mt-3"
+                                 
+                                    onClick={(e)=>{
+                                        router.push({
+                                          pathname:"/community-details",
+                                          query:{
+                                            id:community?.id
+                                          }
+                                        })
+
+                                    }}
+                                      >
                                       View Community
                                     </button>
                                   </div>
-                                </Link>
+                                  </div>
+                                {/* </Link> */}
                               </div>
                             );
                           })}
